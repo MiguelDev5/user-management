@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UserManagement</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/UserManagement.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow bg-magenta">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <img src="~/images/question-icon.png" alt="Logo" style="height:30px;margin: 8px;">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="">
+        <main role="main" class="pb-3 main-custom-bg">
+            @RenderBody()
+        </main>
+    </div>
+
+    @if (Context.Session.GetString("User") != null){
+        <section id="sidebar" class="d-flex flex-column align-items-center py-4">
+            <a href="#" class="sidebar-link mb-3">
+                <img src="~/images/menu-icon.png" alt="Menu" style="width: 24px;">
+            </a>
+
+            <a href="#" class="sidebar-link p-3">
+                <img src="~/images/menu-home-icon.png" alt="Logo" style="height:20px;">
+            </a>
+
+            <a href="#" class="sidebar-link active p-3">
+                <img src="~/images/menu2-icon.png" alt="Logo" style="height:20px;">
+            </a>
+
+            <a href="#" class="sidebar-link p-3 rounded-2" style="background: #FAE6E6;">
+                <img src="~/images/menu1-icon.png" alt="Logo" style="height:20px;">
+            </a>
+
+            <a href="#" class="sidebar-link p-3">
+                <img src="~/images/search-icon.png" alt="Logo" style="height:20px;">
+            </a>
+        </section>
+    }
+
+    <footer class="footer text-muted">
+        <div class="d-flex justify-content-end px-4 py-2">
+            <img src="~/images/footer-img.png" alt="Logo">
+        </div>
+    </footer>
+
+    <div id="modalOverlay"></div>
+    <div id="sessionModal" style="display:none;position:fixed;width: 720px;top:20%; left:50%; transform:translateX(-50%); background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
+        <div class="d-flex align-items-start">
+            <div class="col-1 text-center me-3 mt-1">
+                <img src="~/images/warning-icon.png">
+            </div>
+
+            <div class="col">
+                <h5 class="modal-title fw-bold mb-2">Su sesión está a punto de expirar</h5>
+                
+                <p class="modal-body text-muted small p-0 mb-0">
+                    Por seguridad, su sesión expirará en 
+                    <span id="countdown">20</span>
+                    segundos. Para continuar, seleccione "Extender sesión"
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end pt-0 mt-3">
+            <button type="button" class="btn btn-warning px-4 rounded-2 fw-bold text-dark" style="font-size: 14px;"
+                onclick="extendSession()">
+                Extender sesión
+            </button>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @if (Context.Session.GetString("User") != null){
+        <script>
+            const sessionTimeout = 60; // 1 min
+            const warningTime = 20; // mostrar popup 20 seg antes
+
+            let remaining = sessionTimeout;
+
+            const interval = setInterval(() => {
+                remaining--;
+
+                if (remaining === warningTime) {
+                    document.getElementById("sessionModal").style.display = "block";
+                    document.getElementById("modalOverlay").style.display = "block";
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(interval);
+                    fetch('/Auth/ExpireSession', { method: 'POST' })
+                        .then(() => {
+                            window.location.href = "/Auth/Login";
+                        });
+                }
+
+                // actualizar contador visual
+                if (remaining <= warningTime) {
+                    document.getElementById("countdown").innerText = remaining;
+                }
+
+            }, 1000);
+
+            function extendSession() {
+                fetch('/Auth/ExtendSession', {
+                    method: 'POST'
+                }).then(() => {
+                    remaining = sessionTimeout;
+                    document.getElementById("modalOverlay").style.display = "none";
+                    document.getElementById("sessionModal").style.display = "none";
+                });
+            }
+        </script>
+    }
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,75 @@
+<div class="mt-5">
+    <div class="col-md-12 justify-content-center d-flex">
+        <div class="col-md-3 card p-4 border-0" style="max-width: 350px;">
+            <div class="btn-group w-100 mb-4" role="group">
+                <input type="radio" class="btn-check" name="docType" id="dni" checked>
+                <label class="btn btn-outline-secondary py-2" for="dni">DNI</label>
+
+                <input type="radio" class="btn-check" name="docType" id="ce">
+                <label class="btn btn-outline-secondary py-2" for="ce">CE</label>
+            </div>
+
+            @model LoginViewModel
+            <form asp-controller="Auth" asp-action="Login" method="post">
+    
+                <!-- <div asp-validation-summary="All" class="text-danger"></div> -->
+
+                <div class="mb-3">
+                    <label class="form-label small">Usuario</label>
+                    <div class="input-group">
+                        <img src="~/images/username-icon.png" class="username-icon">
+                        <input asp-for="Username" class="form-control rounded-2" style="padding-left: 35px;" placeholder="Ingresar usuario">
+                    </div>
+                    <span asp-validation-for="Username" class="text-danger small"> 
+                    </span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small">Contraseña</label>
+                    <div class="input-group">
+                        <img src="~/images/password-icon.png" class="username-icon">
+                        <input 
+                            id="passwordInput"
+                            asp-for="Password" 
+                            type="password" 
+                            class="form-control rounded-2" style="padding-left: 35px;" 
+                            placeholder="Ingresar contraseña" value="@(Model?.Password ?? "")">
+                        <img src="~/images/eye-icon.png" class="password-icon" id="togglePassword">     
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"> 
+                    </span>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary bg-violet">Ingresar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="col-md-12 justify-content-center d-flex mt-3">
+        <div class="col-md-3 card py-3 border-0" style="max-width: 350px;padding-left: 2.5rem;padding-right: 2.5rem;">
+            <div class="col-md-12 justify-content-center d-flex">
+                <div class="col-md-2 me-3 text-center">
+                    <img src="~/images/help-icon.png" alt="Logo">
+                </div>
+                <div class="col-md-10 small align-content-center">
+                    <span>
+                        ¿Necesita ayuda?, <a href="#" class="text-decoration-none fw-bold">contacte con el área de soporte</a>.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const toggle = document.getElementById("togglePassword");
+        const input = document.getElementById("passwordInput");
+
+        toggle.addEventListener("click", () => {
+            input.type = input.type === "password" ? "text" : "password";
+        });
+    </script>
+}
