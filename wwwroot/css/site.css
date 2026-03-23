@@ -1,0 +1,92 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.bg-magenta {
+  background: #9A1413;
+}
+
+.bg-violet {
+  background: #0156AC;
+}
+
+/* login */
+
+.username-icon{
+  position: absolute;
+  left: 6px;
+  z-index: 20;
+  top: 6px;
+}
+.password-icon{
+  position: absolute;
+  cursor: pointer;
+  right: 6px;
+  z-index: 20;
+  top: 7px;
+}
+
+.pl-o {
+  padding-left: 35px;
+}
+
+.pr-o {
+  padding-right: 35px;
+}
+.badge-o{
+  background: #E6F3ED;
+  font-size: 14px;
+  color: #005E35;
+  font-weight: 400;
+}
+
+.tab-o{
+  min-height: 450px;
+  padding: 0 1.5rem;
+}
+
+.danger-icon{
+  width: 15px;
+  padding-bottom: 3px;
+}
+
+.field-validation-error::before{
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url('/images/danger-icon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 4px;
+  vertical-align: middle;
+  margin-bottom: 3px;
+}
